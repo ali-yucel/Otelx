@@ -1,0 +1,1 @@
+https://yeniaksesuar.com/otelx/
