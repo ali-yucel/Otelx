@@ -1,0 +1,167 @@
+/* Case Study Css Styles... */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+body {
+  font-family: "Montserrat", sans-serif;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  height: 50px;
+  border-radius: 6px;
+  padding: 0 20px;
+}
+.btn-primary {
+  background-color: #1066fd;
+}
+.btn-success {
+  background-color: #50c70a;
+}
+.jumbotron-heading {
+  font-weight: 500;
+}
+h5.logo a {
+  color: #333;
+}
+.hotel-card {
+  position: relative;
+  display: flex;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 2px solid transparent;
+  box-shadow: 0 0 10px rgb(0 0 0 / 5%);
+  background-color: #fff;
+  transition: 0.6s;
+}
+.hotel-card:hover {
+  border-color: #007bff;
+  box-shadow: 0 0 15px rgb(0 0 0 / 20%);
+}
+.hotel-card:hover .delete-hotel {
+  top: -10px;
+  right: -10px;
+  opacity: 1;
+  visibility: visible;
+}
+.hotel-card-image {
+  position: relative;
+  padding-top: 175px;
+  width: 175px;
+}
+.hotel-card-image > img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  display: block;
+  border-radius: 6px;
+  max-width: 100%;
+  max-height: 100%;
+}
+.hotel-card-body {
+  flex: 1 0 0;
+  margin-left: 16px;
+}
+.hotel-card-name {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.hotel-card-point {
+  width: 300px;
+  max-width: 100%;
+  display: inline-block;
+  color: #0dc5bb;
+  font-size: 20px;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 8px 16px;
+  margin-bottom: 32px;
+  background-color: #f6f9fd;
+}
+.hotel-card-point-buttons {
+  display: flex;
+  align-items: center;
+}
+.hotel-card-point-buttons > .btn {
+  justify-content: center;
+}
+.hotel-card-point-buttons button.point-plus {
+  margin-right: 12px;
+}
+.hotel-card .delete-hotel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+}
+.paginate-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.paginate-wrapper .paginate > button {
+  padding: 0 15px;
+  margin: 0 6px;
+}
+.paginate-wrapper #prev-button {
+  margin-right: 6px;
+}
+.paginate-wrapper #next-button {
+  margin-left: 6px;
+}
+#sorting-select {
+  width: 180px;
+  margin-left: auto;
+  margin-bottom: 12px;
+}
+@media (min-width: 767px) {
+  .jumbotron {
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+}
+@media (max-width: 991px) {
+  .hotel-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 12px;
+  }
+  .hotel-card-image {
+    width: unset;
+    padding-top: 100%;
+    border-radius: 6px;
+    border: 1px solid #e1eaf1;
+    margin-bottom: 20px;
+  }
+  .hotel-card-body {
+    margin-left: 0;
+  }
+  .hotel-card-name {
+    font-size: 20px;
+  }
+  .hotel-card-point {
+    margin-bottom: 20px;
+  }
+  .hotel-card-point-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .hotel-card-point-buttons > .btn {
+    height: 45px;
+    padding: 0 10px;
+    margin-right: 0;
+  }
+}
