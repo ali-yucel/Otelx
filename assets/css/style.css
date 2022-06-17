@@ -124,8 +124,10 @@ h5.logo a {
 }
 #sorting-select {
   width: 180px;
+  border: none;
   margin-left: auto;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 5%);
 }
 @media (min-width: 767px) {
   .jumbotron {

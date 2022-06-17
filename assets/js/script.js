@@ -18,6 +18,7 @@ async function init() {
         data = JSON.parse( localStorage["hotels"]);
         renderTable();
         paginate();
+        activePage();
         document.querySelector('#next-button').addEventListener('click', nextPage, false);
         document.querySelector('#prev-button').addEventListener('click', previousPage, false);
         document.querySelector('.paginate-button').addEventListener('click', paginateButton, true);
@@ -81,17 +82,26 @@ function paginate(){
 
 function paginateButton(index) {
     curPage = index; 
-    renderTable(); 
+    renderTable();
+    localStorage.setItem('active-page', index);
+    activePage(index);
 }
 
 function previousPage() {
     if(curPage > 1) curPage--;
     renderTable();
+    activePage(curPage);
 }
   
 function nextPage() {
     if((curPage * pageSize) < data.length) curPage++;
     renderTable();
+    activePage(curPage);
+}
+
+function activePage(page=1){  
+  $('.paginate > button').eq(page -1).addClass('active-page');
+  localStorage.setItem('active-page', page);
 }
 
 function pointPlus(index) {
