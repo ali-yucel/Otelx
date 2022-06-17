@@ -116,6 +116,10 @@ h5.logo a {
   padding: 0 15px;
   margin: 0 6px;
 }
+.paginate-wrapper .paginate > button.active-page {
+  color: #fff;
+  background-color: #1066fd;
+}
 .paginate-wrapper #prev-button {
   margin-right: 6px;
 }
