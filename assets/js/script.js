@@ -74,7 +74,6 @@ function paginate(){
     var totalPage = data.length/pageSize;
     $('.paginate-wrapper .paginate').html('');
     for (let index = 1; index <= Math.ceil(totalPage); index++) {
-        // const element = array[index];
         // console.log(index);
         $('.paginate-wrapper .paginate').append(`<button class="btn btn-outline-primary paginate-button" onclick="paginateButton(${index})">${index}</button>`)   
     }
@@ -89,7 +88,7 @@ function paginateButton(index) {
 
 function previousPage() {
     if(curPage > 1) curPage--;
-    renderTable();
+    renderTable(); 
     activePage(curPage);
 }
   
@@ -99,7 +98,7 @@ function nextPage() {
     activePage(curPage);
 }
 
-function activePage(page=1){  
+function activePage(page=1){
   $('.paginate > button').eq(page -1).addClass('active-page');
   localStorage.setItem('active-page', page);
 }
@@ -125,9 +124,7 @@ function pointMinus(index) {
  }
 
 function deleteHotel(index) {
-    console.log(index);
     let hotelCardName = $('.hotel-card-'+index).find('.hotel-card-name').text();
-    console.log(hotelCardName); 
     Swal.fire({
         title: 'Oteli Sil',
         html: `<b>${hotelCardName}</b> i silmek istediğinizden emin misiniz?`,
@@ -142,7 +139,9 @@ function deleteHotel(index) {
             data.splice(index, 1);
             localRender(data);
             renderTable();
+            activePage(localStorage["active-page"]);
             if(data.length < 1){
+                localStorage.removeItem('active-page');
                 localStorage.removeItem('hotels');
                 document.location.reload(true);
             }
@@ -154,16 +153,7 @@ function deleteHotel(index) {
           )
         }
       })
- }
-
- function removeEmpty(obj) {
-    Object.keys(obj).forEach(key => {
-        if (obj[key] === null || obj[key] === undefined) {
-          delete obj[key];
-        }
-      });
-      console.log(obj);
-  }
+}
 
  function localRender(object){
     localStorage.setItem('hotels', JSON.stringify(object));
