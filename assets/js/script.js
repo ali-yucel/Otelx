@@ -7,10 +7,9 @@
 document.addEventListener('DOMContentLoaded', init, false);
 
 var hotels = [];
-let data, table, sortCol;
-let sortAsc = false;
-const pageSize = 5;
+let data, table;
 let curPage = localStorage.hasOwnProperty('active-page') ? localStorage["active-page"] : 1;
+const pageSize = 5;
 
 async function init() {
     if(localStorage.hasOwnProperty('hotels')){
