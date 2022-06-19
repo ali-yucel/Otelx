@@ -10,15 +10,13 @@ var hotels = [];
 let data, table, sortCol;
 let sortAsc = false;
 const pageSize = 5;
-let curPage = 1;
+let curPage = localStorage.hasOwnProperty('active-page') ? localStorage["active-page"] : 1;
 
 async function init() {
     if(localStorage.hasOwnProperty('hotels')){
         wrapper = document.querySelector('#result');        
         data = JSON.parse( localStorage["hotels"]);
         renderTable();
-        paginate();
-        activePage();
         document.querySelector('#next-button').addEventListener('click', nextPage, false);
         document.querySelector('#prev-button').addEventListener('click', previousPage, false);
         document.querySelector('.paginate-button').addEventListener('click', paginateButton, true);
@@ -38,26 +36,19 @@ function renderTable() {
       $('.hotel-count').removeClass('d-none').find('span').text(data.length);
     };
     if(localStorage.hasOwnProperty('sorting-val') && localStorage["sorting-val"] != ''){
-      console.log("ddd1");
       $('select#sorting-select option[value="'+localStorage["sorting-val"]+'"]').prop("selected", true);
       data.sort(function (a, b) {
-        if(localStorage["sorting-val"] == "asc"){
-          if(a.star == b.star){
-            return Date.parse(b.time) - Date.parse(a.time); // Eğer puan eşitse zamana göre...  
+        if(a.star == b.star){
+          return Date.parse(b.time) - Date.parse(a.time); // by time...  
+        }else {
+          if(localStorage["sorting-val"] == "asc"){
+              return a.star - b.star;
           }else {
-            return a.star - b.star;
+              return b.star - a.star; 
           }
-        }
-        if(localStorage["sorting-val"] == "desc"){ 
-          if(a.star == b.star){
-            return Date.parse(b.time) - Date.parse(a.time); // Eğer puan eşitse zamana göre...
-          }else {
-            return b.star - a.star; 
-          }           
         }
       }); 
     }else {
-      console.log("ddd2"); 
       data.sort(function (a, b) {
         return Date.parse(b.time) - Date.parse(a.time);
       });
@@ -70,8 +61,8 @@ function renderTable() {
     }).forEach(c => {
       var listIndex = Math.abs(pageSize-count-(pageSize*curPage));
       result += `
-      <div class="col-md-6 col-lg-12">
-        <div class="hotel-card hotel-card-${listIndex}" title="${c.time}">
+      <div class="col-md-6 col-lg-12" title="${c.time}">
+        <div class="hotel-card hotel-card-${listIndex}">
           <div class="hotel-card-image">
           <img src="/otelx/assets/images/placeholder.jpg" alt="Hotel Name">
           </div>
@@ -92,6 +83,7 @@ function renderTable() {
   });
   wrapper.innerHTML = result;
   paginate();
+  activePage(localStorage["active-page"]);
 }
 
 function paginate(){
@@ -134,8 +126,9 @@ function nextPage() {
 }
 
 function activePage(page=1){
+  $('.paginate > button').removeClass('active-page');
   $('.paginate > button').eq(page -1).addClass('active-page');
-  localStorage.setItem('active-page', parseInt(page));
+  localStorage.setItem('active-page', page);
 }
 
 function pointPlus(index) {
@@ -146,17 +139,19 @@ function pointPlus(index) {
     data[index].star = lastPoint; 
     localRender(data); 
     renderTable();
+    activePage(localStorage["active-page"]);
   }
 }
 
 function pointMinus(index) {
-    var point = parseFloat($('.hotel-card-'+index).find('.hotel-card-point > span').text());
+    let point = parseFloat($('.hotel-card-'+index).find('.hotel-card-point > span').text());
     let lastPoint = (point-1).toFixed(1);
     if(lastPoint > 0){
         $('.hotel-card-'+index).find('.hotel-card-point > span').text(lastPoint);
         data[index].star = lastPoint; 
         localRender(data);
         renderTable();
+        activePage(localStorage["active-page"]);
     }
  }
 
@@ -183,6 +178,7 @@ function deleteHotel(index) {
             if(data.length < 1){
                 localStorage.removeItem('active-page');
                 localStorage.removeItem('hotels');
+                localStorage.removeItem('sorting-val');
                 document.location.reload(true);
             }
           Swal.fire(
