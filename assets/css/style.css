@@ -156,27 +156,27 @@ h5.logo a {
     text-align: center;
     padding: 12px;
   }
-  .hotel-card-image {
+  .hotel-card .hotel-card-image {
     width: unset;
     padding-top: 100%;
     border-radius: 6px;
     border: 1px solid #e1eaf1;
     margin-bottom: 20px;
   }
-  .hotel-card-body {
+  .hotel-card .hotel-card-body {
     margin-left: 0;
   }
-  .hotel-card-name {
-    font-size: 20px;
+  .hotel-card .hotel-card-name {
+    font-size: 18px;
   }
-  .hotel-card-point {
+  .hotel-card .hotel-card-point {
     margin-bottom: 20px;
   }
-  .hotel-card-point-buttons {
+  .hotel-card .hotel-card-point-buttons {
     flex-wrap: wrap;
     justify-content: center;
   }
-  .hotel-card-point-buttons > .btn {
+  .hotel-card .hotel-card-point-buttons > .btn {
     height: 45px;
     padding: 0 10px;
     margin-right: 0;
