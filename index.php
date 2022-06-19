@@ -28,8 +28,8 @@
               </div>
               <select class="form-control" id="sorting-select">
                 <option value="">Sıralama</option> 
-                <option value="">Puan (Artan)</option>
-                <option value="">Puan (Azalan)</option>
+                <option value="asc">Puan (Artan)</option>
+                <option value="desc">Puan (Azalan)</option>
               </select>
               <div id="result" class="row"></div>
               

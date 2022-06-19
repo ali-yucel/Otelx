@@ -22,9 +22,8 @@ async function init() {
         document.querySelector('#next-button').addEventListener('click', nextPage, false);
         document.querySelector('#prev-button').addEventListener('click', previousPage, false);
         document.querySelector('.paginate-button').addEventListener('click', paginateButton, true);
+        document.querySelector('#sorting-select').addEventListener('change', sortTable, true);
     }else {
-        // let resp = await fetch('https://yeniaksesuar.com/otelx/data.json');
-        // data = await resp.json();
         $('#info').removeClass('d-none');
         $('.paginate-wrapper').addClass('d-none');
         $('#sorting-select').addClass('d-none');
@@ -37,6 +36,31 @@ function renderTable() {
   let result = '';
     if(data.length > 0) {
       $('.hotel-count').removeClass('d-none').find('span').text(data.length);
+    };
+    if(localStorage.hasOwnProperty('sorting-val') && localStorage["sorting-val"] != ''){
+      console.log("ddd1");
+      $('select#sorting-select option[value="'+localStorage["sorting-val"]+'"]').prop("selected", true);
+      data.sort(function (a, b) {
+        if(localStorage["sorting-val"] == "asc"){
+          if(a.star == b.star){
+            return Date.parse(b.time) - Date.parse(a.time); // Eğer puan eşitse zamana göre...  
+          }else {
+            return a.star - b.star;
+          }
+        }
+        if(localStorage["sorting-val"] == "desc"){ 
+          if(a.star == b.star){
+            return Date.parse(b.time) - Date.parse(a.time); // Eğer puan eşitse zamana göre...
+          }else {
+            return b.star - a.star; 
+          }           
+        }
+      }); 
+    }else {
+      console.log("ddd2"); 
+      data.sort(function (a, b) {
+        return Date.parse(b.time) - Date.parse(a.time);
+      });
     }
     data.filter((row, index) => {
           let start = (curPage-1)*pageSize;
@@ -47,13 +71,13 @@ function renderTable() {
       var listIndex = Math.abs(pageSize-count-(pageSize*curPage));
       result += `
       <div class="col-md-6 col-lg-12">
-        <div class="hotel-card hotel-card-${listIndex}">
+        <div class="hotel-card hotel-card-${listIndex}" title="${c.time}">
           <div class="hotel-card-image">
           <img src="/otelx/assets/images/placeholder.jpg" alt="Hotel Name">
           </div>
           <div class="hotel-card-body">
-          <div class="hotel-card-name">${c[0]}</div>
-          <div class="hotel-card-point"><span>${c[1]}</span> Puan</div>
+          <div class="hotel-card-name">${c.hotelname}</div>
+          <div class="hotel-card-point"><span>${c.star}</span> Puan</div>
           <div class="hotel-card-point-buttons">
               <button class="btn btn-outline-primary point-plus" onclick="pointPlus(${listIndex})">PUAN ARTIR</button>
               <button class="btn btn-outline-primary point-minus" onclick="pointMinus(${listIndex})">PUAN AZALT</button>
@@ -71,18 +95,29 @@ function renderTable() {
 }
 
 function paginate(){
-    var totalPage = data.length/pageSize;
+    let pResult = '';
+    let totalPage = data.length/pageSize;
     $('.paginate-wrapper .paginate').html('');
     for (let index = 1; index <= Math.ceil(totalPage); index++) {
-        // console.log(index);
-        $('.paginate-wrapper .paginate').append(`<button class="btn btn-outline-primary paginate-button" onclick="paginateButton(${index})">${index}</button>`)   
+        pResult += `<button class="btn btn-outline-primary paginate-button" onclick="paginateButton(${index})">${index}</button>`;
+    }
+    document.querySelector('.paginate-wrapper .paginate').innerHTML = pResult;
+
+    if(curPage > 1){
+      document.querySelector('#prev-button').classList.add("active-page");
+    }else {
+      document.querySelector('#prev-button').classList.remove("active-page");
+    }
+    if((curPage * pageSize) < data.length) {
+      document.querySelector('#next-button').classList.add("active-page");
+    }else {
+      document.querySelector('#next-button').classList.remove("active-page");
     }
 }
 
 function paginateButton(index) {
     curPage = index; 
     renderTable();
-    localStorage.setItem('active-page', index);
     activePage(index);
 }
 
@@ -100,7 +135,7 @@ function nextPage() {
 
 function activePage(page=1){
   $('.paginate > button').eq(page -1).addClass('active-page');
-  localStorage.setItem('active-page', page);
+  localStorage.setItem('active-page', parseInt(page));
 }
 
 function pointPlus(index) {
@@ -108,9 +143,10 @@ function pointPlus(index) {
    let lastPoint = (point+1).toFixed(1);
   if(lastPoint < 10){
     $('.hotel-card-'+index).find('.hotel-card-point > span').text(lastPoint);
-    data[index][1] = lastPoint; 
+    data[index].star = lastPoint; 
     localRender(data); 
- }
+    renderTable();
+  }
 }
 
 function pointMinus(index) {
@@ -118,8 +154,9 @@ function pointMinus(index) {
     let lastPoint = (point-1).toFixed(1);
     if(lastPoint > 0){
         $('.hotel-card-'+index).find('.hotel-card-point > span').text(lastPoint);
-        data[index][1] = lastPoint; 
+        data[index].star = lastPoint; 
         localRender(data);
+        renderTable();
     }
  }
 
@@ -140,6 +177,9 @@ function deleteHotel(index) {
             localRender(data);
             renderTable();
             activePage(localStorage["active-page"]);
+            if(localStorage["active-page"] > Math.ceil(data.length/pageSize)){
+              $('.paginate button:last-child').trigger('click');
+            }
             if(data.length < 1){
                 localStorage.removeItem('active-page');
                 localStorage.removeItem('hotels');
@@ -155,24 +195,34 @@ function deleteHotel(index) {
       })
 }
 
+function sortTable(){
+  let sortingVal = document.querySelector('#sorting-select').value;
+  if(sortingVal != ""){ 
+    localStorage.setItem('sorting-val', sortingVal);
+  }else {
+    localStorage.removeItem('sorting-val');
+  }
+  renderTable();
+}
+ 
  function localRender(object){
     localStorage.setItem('hotels', JSON.stringify(object));
  }
 
  function demoDataUpload() {
-    let demoData = [
-        ["Papillon Zeugma Relaxury","7.5"],
-        ["Maxx Royal Belek Golf Resort","9.7"],
-        ["Vogue Hotel Supreme Bodrum","8.3"],
-        ["Nirvana Dolce Vita","7.6"],
-        ["Kaya Palazzo Golf Resort","4.2"],
-        ["Voyage Torba","9.1"],
-        ["Elexus Hotel Resort Casino","9.33"],
-        ["Limak Cyprus Deluxe Hotel","9.1"],
-        ["Acapulco Resort Convention Spa","8.4"],
-        ["Merit Royal Hotel & Casino","8.7"],
-        ["My Ella Bodrum Resort & Spa","9.8"],
-        ["Korumar Ephesus Beach & Spa Resort","8.4"]
+    let demoData =  [
+        {hotelname:"Papillon Zeugma Relaxury",star: 7.5,time:"2012-01-17 13:51:50"},
+        {hotelname:"Maxx Royal Belek Golf Resort",star: 9.7,time:"2020-02-22 13:51:50"},
+        {hotelname:"Vogue Hotel Supreme Bodrum",star: 8.3,time:"2010-10-23 13:51:50"},
+        {hotelname:"Nirvana Dolce Vita",star: 7.6,time:"2002-01-20 13:51:50"},
+        {hotelname:"Kaya Palazzo Golf Resort",star: 6.3,time:"1998-11-13 13:51:50"},
+        {hotelname:"Voyage Torba",star: 9.1,time:"2001-01-26 13:51:50"},
+        {hotelname:"Elexus Hotel Resort Casino",star: 9.3,time:"2021-02-17 13:51:50"},
+        {hotelname:"Limak Cyprus Deluxe Hotel",star: 8.8,time:"2017-03-16 13:51:50"},
+        {hotelname:"Acapulco Resort Convention",star: 8.4,time:"2005-08-06 13:51:50"},
+        {hotelname:"Merit Royal Hotel & Casino",star: 8.7,time:"2008-07-06 13:51:50"},
+        {hotelname:"My Ella Bodrum Resort & Spa",star: 9.8,time:"2015-01-22 13:51:50"},
+        {hotelname:"Korumar Ephesus Beach & Spa Resort",star: 8.4,time:"2010-12-10 13:51:50"},
     ];
     localRender(demoData);
     document.location.reload(true);

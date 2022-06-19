@@ -44,12 +44,12 @@ h5.logo a {
   opacity: 1;
   visibility: visible;
 }
-.hotel-card-image {
+.hotel-card .hotel-card-image {
   position: relative;
   padding-top: 175px;
   width: 175px;
 }
-.hotel-card-image > img {
+.hotel-card .hotel-card-image > img {
   position: absolute;
   top: 0;
   right: 0;
@@ -61,16 +61,16 @@ h5.logo a {
   max-width: 100%;
   max-height: 100%;
 }
-.hotel-card-body {
+.hotel-card .hotel-card-body {
   flex: 1 0 0;
   margin-left: 16px;
 }
-.hotel-card-name {
+.hotel-card .hotel-card-name {
   font-size: 24px;
   font-weight: 500;
   margin-bottom: 10px;
 }
-.hotel-card-point {
+.hotel-card .hotel-card-point {
   width: 300px;
   max-width: 100%;
   display: inline-block;
@@ -78,18 +78,18 @@ h5.logo a {
   font-size: 20px;
   font-weight: 500;
   border-radius: 6px;
-  padding: 8px 16px;
+  padding: 6px 16px;
   margin-bottom: 32px;
   background-color: #f6f9fd;
 }
-.hotel-card-point-buttons {
+.hotel-card .hotel-card-point-buttons {
   display: flex;
   align-items: center;
 }
-.hotel-card-point-buttons > .btn {
+.hotel-card .hotel-card-point-buttons > .btn {
   justify-content: center;
 }
-.hotel-card-point-buttons button.point-plus {
+.hotel-card .hotel-card-point-buttons button.point-plus {
   margin-right: 12px;
 }
 .hotel-card .delete-hotel {
@@ -125,6 +125,17 @@ h5.logo a {
 }
 .paginate-wrapper #next-button {
   margin-left: 6px;
+}
+.paginate-wrapper #prev-button:hover,
+.paginate-wrapper #next-button:hover {
+  color: #1066fd;
+  border-color: #1066fd;
+  background-color: #fff;
+}
+.paginate-wrapper #prev-button.active-page,
+.paginate-wrapper #next-button.active-page {
+  color: #fff;
+  background-color: #1066fd;
 }
 #sorting-select {
   width: 180px;

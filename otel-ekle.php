@@ -62,7 +62,10 @@
                   confirmButtonText: 'Tamam'
              });
           }else {
-            var hotel = [hotelName,parseFloat(hotelPoint).toFixed(1)];
+            var d = new Date();
+            let dMonth = ("0" + (d.getMonth() + 1)).slice(-2);
+            var date = d.getFullYear()+'-'+dMonth+'-'+d.getDate()+ " " +d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+            let hotel = { hotelname : hotelName,star : parseFloat(hotelPoint).toFixed(1),time : date};
             items.push(hotel);
             $(this).text('EKLENDİ').addClass('btn-success').removeClass('btn-primary').prepend('<svg style="margin-right:10px;" id="i-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M2 20 L12 28 30 4" /></svg>');
             localStorage.setItem('hotels', JSON.stringify(items));
