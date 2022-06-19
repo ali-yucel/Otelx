@@ -51,6 +51,6 @@
         </div>
       </div>
     </main> <?php include('includes/footer.php'); ?> 
-    <script src="assets/js/script.js" crossorigin="anonymous"></script>
+    <script src="assets/js/script.js?v=<?php echo filemtime('assets/js/script.js'); ?>" crossorigin="anonymous"></script>
   </body>
 </html>
